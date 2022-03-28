@@ -1,0 +1,13 @@
+# this is example so you know how to add custom arguments
+apiVersion: builtin
+kind: PatchJson6902Transformer
+metadata:
+  name: argocd-server-affinities
+target:
+  group: apps
+  version: v1
+  kind: Deployment
+  name: argocd-server
+jsonOp: |-
+  - op: remove
+    path: /spec/template/spec/affinity

@@ -1,0 +1,13 @@
+# this is example so you know how to add custom arguments
+apiVersion: builtin
+kind: PatchJson6902Transformer
+metadata:
+  name: redis-ha-affinities
+target:
+  group: apps
+  version: v1
+  kind: StatefulSet
+  name: argocd-redis-ha-server
+jsonOp: |-
+  - op: remove
+    path: /spec/template/spec/affinity

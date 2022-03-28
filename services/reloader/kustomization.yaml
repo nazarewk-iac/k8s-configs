@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: reloader
+
+patchesStrategicMerge:
+  - deployment.yaml
+
+resources:
+  - https://raw.githubusercontent.com/stakater/Reloader/v0.0.110/deployments/kubernetes/reloader.yaml
+  - namespace.yaml
+
