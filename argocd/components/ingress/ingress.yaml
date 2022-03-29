@@ -16,7 +16,7 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  number: 80
+                  name: http
             path: /
             pathType: Prefix
     - host: argo-cd-application-set.nazarewk.pw
