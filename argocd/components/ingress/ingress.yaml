@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: argocd
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd
+spec:
+  rules:
+    - host: argo-cd.nazarewk.pw
+      http:
+        paths:
+          - backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: argo-cd-application-set.nazarewk.pw
+      http:
+        paths:
+          - backend:
+              service:
+                name: argocd-applicationset-controller
+                port:
+                  name: webhook
+            path: /api/webhook
+            pathType: Exact
+
