@@ -1,0 +1,12 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  profile: default
+
+  components:
+    cni:
+      enabled: true
+
+  values:
+    cni:
+      chained: true

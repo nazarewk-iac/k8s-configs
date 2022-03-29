@@ -8,16 +8,16 @@ resources:
 patchesStrategicMerge:
   - argocd-cm.yaml
 
-patchesJson6902:
-  - target:
-      version: v1
-      group: networking.k8s.io
-      kind: Ingress
-      name: argocd-server
-    path: patches/limit-cloudflare.yaml
-  - target:
-      version: v1
-      group: networking.k8s.io
-      kind: Ingress
-      name: argocd-applicationset-controller
-    path: patches/limit-cloudflare.yaml
+#patchesJson6902:
+#  - target:
+#      version: v1
+#      group: networking.k8s.io
+#      kind: Ingress
+#      name: argocd-server
+#    path: patches/limit-cloudflare.yaml
+#  - target:
+#      version: v1
+#      group: networking.k8s.io
+#      kind: Ingress
+#      name: argocd-applicationset-controller
+#    path: patches/limit-cloudflare.yaml

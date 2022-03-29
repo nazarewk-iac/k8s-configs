@@ -9,6 +9,7 @@ metadata:
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
 spec:
+  ingressClassName: istio
   rules:
     - host: argo-cd.nazarewk.pw
       http:
