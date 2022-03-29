@@ -27,6 +27,6 @@ spec:
                 name: argocd-applicationset-controller
                 port:
                   name: webhook
-            path: /api/webhook/
-            pathType: Exact
+            path: /
+            pathType: Prefix
 
