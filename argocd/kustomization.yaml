@@ -7,6 +7,7 @@ namespace: argocd
 components:
   - components/reloader
   - components/single-node
+  - components/haproxy-fix
 
 resources:
   - https://raw.githubusercontent.com/argoproj/argo-cd/v2.3.1/manifests/ha/install.yaml

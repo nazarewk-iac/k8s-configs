@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-redis-ha-haproxy
+
+spec:
+  template:
+    spec:
+      containers:
+        - name: haproxy
+          resources:
+            limits:
+              memory: 64M
+              cpu: 200m
+          args:
+            - haproxy
+            - -n  # this sets global.maxconn to sensible value, on 128GB RAM machine it defaults to 536870842 eating up the whole RAM
+            - "1000"
+            - -f
+            - /usr/local/etc/haproxy/haproxy.cfg
