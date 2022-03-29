@@ -9,11 +9,8 @@ get_ranges() {
     curl -sf -L 'https://www.cloudflare.com/ips-v6'
   } | sort | uniq | head -c-1
 }
-cat <<EOF > limit-cloudflare.yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: argocd-server
-  annotations:
-    traefik.ingress.kubernetes.io/whitelist-source-range: '$(get_ranges | tr '\n' ',' | sed 's/,/, /g')'
+cat <<EOF > patches/limit-cloudflare.yaml
+- op: add
+  path: "/metadata/annotations/traefik.ingress.kubernetes.io~1whitelist-source-range"
+  value: '$(get_ranges | tr '\n' ',' | sed 's/,/, /g')'
 EOF

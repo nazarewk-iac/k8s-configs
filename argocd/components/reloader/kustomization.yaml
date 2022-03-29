@@ -1,8 +1,28 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
-patchesStrategicMerge:
-  - argocd-application-controller.yaml
-  - argocd-cmd-params-cm.yaml
-  - argocd-repo-server.yaml
-  - argocd-server.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      group: apps
+      kind: StatefulSet
+      name: argocd-application-controller
+    path: patches/search-annotation.yaml
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: argocd-repo-server
+    path: patches/search-annotation.yaml
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: argocd-server
+    path: patches/search-annotation.yaml
+  - target:
+      version: v1
+      group: ''
+      kind: ConfigMap
+      name: argocd-cmd-params-cm
+    path: patches/match-annotation.yaml
