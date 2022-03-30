@@ -1,0 +1,3 @@
+app:
+  name: istio
+managed-by: argocd

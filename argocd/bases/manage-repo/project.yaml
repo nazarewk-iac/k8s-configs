@@ -3,15 +3,15 @@ kind: AppProject
 metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  name: argocd-system
+  name: k8s-configs
 spec:
-  description: Encapsulates root of ArgoCD infrastructure
+  description: Encapsulates ArgoCD applications in https://github.com/nazarewk-iac/k8s-configs
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'
   destinations:
     - name: in-cluster
-      namespace: argocd
+      namespace: '*'
       server: '*'
   namespaceResourceWhitelist:
     - group: '*'

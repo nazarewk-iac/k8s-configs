@@ -1,0 +1,3 @@
+app:
+  name: reloader
+managed-by: argocd

@@ -1,0 +1,9 @@
+# you can build it by running `kustomize build --enable-helm .`
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+
+resources:
+  - project.yaml
+  - app-set.yaml

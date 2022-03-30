@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: k8s-configs
+spec:
+  generators:
+    - git:
+        files:
+          - path: '**/argocd-managed.yaml'
+        repoURL: &repo https://github.com/nazarewk-iac/k8s-configs
+        revision: &rev HEAD
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+  template:
+    metadata:
+      name: '{{ app.name }}'
+      namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: k8s-configs
+      destination:
+        name: in-cluster
+        namespace: argocd
+      revisionHistoryLimit: 5
+      source:
+        path: '{{ path }}'
+        repoURL: *repo
+        targetRevision: *rev
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - RespectIgnoreDifferences=true
+
+      ignoreDifferences:
+        - group: admissionregistration.k8s.io
+          kind: MutatingWebhookConfiguration
+          name: istio-sidecar-injector
+          jqPathExpressions:
+            - .webhooks[].clientConfig.caBundle
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          name: istio-validator-istio-system
+          jqPathExpressions:
+            - .webhooks[].clientConfig.caBundle
+            - .webhooks[].failurePolicy
+
