@@ -28,27 +28,21 @@ valuesInline:
 #            storage: 512Gi
 
     storage:
-      useAllNodes: false
+      useAllNodes: true
       useAllDevices: false
-      nodes:
-        - name: nazarewk-krul
       config:
         encryptedDevice: 'true'
       storageClassDeviceSets:
-        - name: medium-speed
+        - name: ssd
           count: 2
-          portable: false
+          portable: truedrop rook ceph cluster
           encrypted: true
           volumeClaimTemplates:
             - metadata:
                 labels:
                   storage.nazarewk.pw/type: ssd
-                  storage.nazarewk.pw/performance: medium
               spec:
                 storageClassName: local-storage
-                resources:
-                  requests:
-                    storage: 512Gi
                 volumeMode: Block
                 accessModes:
                   - ReadWriteOnce
@@ -56,8 +50,8 @@ valuesInline:
     resources:
       mon:
         limits:
-          cpu: 4
-          memory: 2Gi
+          cpu: 2
+          memory: 4Gi
 
   configOverride: |
     [global]

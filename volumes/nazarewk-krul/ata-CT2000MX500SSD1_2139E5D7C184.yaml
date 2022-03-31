@@ -1,11 +1,10 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: &name ata-ct2000mx500ssd1-2139e5d7c184-part1
+  name: &name ata-ct2000mx500ssd1-2139e5d7c184
   labels:
     k8s.nazarewk.pw/name: *name
     storage.nazarewk.pw/type: ssd
-    storage.nazarewk.pw/performance: medium
 spec:
   storageClassName: local-storage
   nodeAffinity:
@@ -20,7 +19,7 @@ spec:
   capacity:
     storage: 512Gi
   local:
-    path: /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184-part1
+    path: /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain

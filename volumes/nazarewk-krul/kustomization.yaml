@@ -6,5 +6,5 @@ commonLabels:
   app.kubernetes.io/instance: nazarewk-krul
 
 resources:
-  - ata-Patriot_P210_2048GB_P210EBBB2109130548-part1.yaml
-  - ata-CT2000MX500SSD1_2139E5D7C184-part1.yaml
+  - ata-Patriot_P210_2048GB_P210EBBB2109130548.yaml
+  - ata-CT2000MX500SSD1_2139E5D7C184.yaml
