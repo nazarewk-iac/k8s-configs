@@ -43,6 +43,9 @@ valuesInline:
                   storage.nazarewk.pw/type: ssd
               spec:
                 storageClassName: local-storage
+                resources:
+                  requests:
+                    storage: 10Gi
                 volumeMode: Block
                 accessModes:
                   - ReadWriteOnce
