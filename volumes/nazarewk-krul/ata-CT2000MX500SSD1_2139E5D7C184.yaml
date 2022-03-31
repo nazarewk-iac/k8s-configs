@@ -23,4 +23,4 @@ spec:
     path: /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Delete

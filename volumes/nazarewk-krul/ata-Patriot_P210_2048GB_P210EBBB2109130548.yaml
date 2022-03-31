@@ -23,4 +23,4 @@ spec:
     path: /dev/disk/by-id/ata-Patriot_P210_2048GB_P210EBBB2109130548
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Delete
