@@ -14,6 +14,18 @@ spec:
       containers:
         - name: plantuml-server
           image: plantuml/plantuml-server:v1.2022.2
+          securityContext:
+            readOnlyRootFilesystem: true
           ports:
             - containerPort: 8080
               name: http
+          volumeMounts:
+            - mountPath: /tmp/jetty
+              name: jetty-tmp
+          resources:
+            limits:
+              memory: 2G
+              cpu: 1000m
+      volumes:
+        - name: jetty-tmp
+          emptyDir: {}
