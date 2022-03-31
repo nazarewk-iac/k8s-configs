@@ -16,8 +16,8 @@ spec:
               values:
                 - nazarewk-krul
   volumeMode: Block
-  capacity:
-    storage: 512Gi
+#  capacity:
+#    storage: 512Gi
   local:
     path: /dev/disk/by-id/ata-Patriot_P210_2048GB_P210EBBB2109130548
   accessModes:
