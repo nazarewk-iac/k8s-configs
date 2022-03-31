@@ -21,15 +21,37 @@ valuesInline:
     mon:
       count: 2
       allowMultiplePerNode: true  # running single node for now
+      volumeClaimTemplate:
+        storageClassName: local-storage
+        resources:
+          requests:
+            storage: 512Gi
 
     storage:
       useAllNodes: false
       useAllDevices: false
+      nodes:
+        - name: nazarewk-krul
       config:
         encryptedDevice: 'true'
-      devices:
-        - name: /dev/disk/by-id/ata-Patriot_P210_2048GB_P210EBBB2109130548-part1
-        - name: /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184-part1
+      storageClassDeviceSets:
+        - name: medium-speed
+          count: 2
+          portable: false
+          encrypted: true
+          volumeClaimTemplates:
+            - metadata:
+                labels:
+                  storage.nazarewk.pw/type: ssd
+                  storage.nazarewk.pw/performance: medium
+              spec:
+                storageClassName: local-storage
+                resources:
+                  requests:
+                    storage: 512Gi
+                volumeMode: Block
+                accessModes:
+                  - ReadWriteOnce
 
   configOverride: |
     [global]
