@@ -1,0 +1,8 @@
+# Had to override SyncOption Replace=true to apply Prometheus, see:
+# - https://github.com/prometheus-operator/prometheus-operator/issues/4439
+# - https://github.com/argoproj/argo-cd/issues/2730
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - application.yaml

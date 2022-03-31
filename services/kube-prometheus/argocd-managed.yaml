@@ -1,3 +1,0 @@
-app:
-  name: kube-prometheus
-managed-by: argocd
