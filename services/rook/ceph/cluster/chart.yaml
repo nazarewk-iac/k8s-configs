@@ -53,6 +53,12 @@ valuesInline:
                 accessModes:
                   - ReadWriteOnce
 
+    resources:
+      mon:
+        limits:
+          cpu: 4
+          memory: 2Gi
+
   configOverride: |
     [global]
     mon_allow_pool_delete = true
