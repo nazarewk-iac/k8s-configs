@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: plantuml-server
-          image: plantuml/plantuml-server:v1.2022.2
+          image: plantuml/plantuml-server:v1.2022.3
           securityContext:
             readOnlyRootFilesystem: true
           ports:
