@@ -1,0 +1,3 @@
+app:
+  name: rook-ceph-operator
+managed-by: argocd

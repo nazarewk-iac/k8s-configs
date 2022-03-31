@@ -1,0 +1,68 @@
+# docs are wrong, see https://github.com/kubernetes-sigs/kustomize/blob/b0d7721049d557063e324c7c2c1ef45bb73e4bdc/api/types/helmchartargs.go#L33-L75
+apiVersion: builtin
+kind: HelmChartInflationGenerator
+metadata:
+  name: rook-ceph-cluster
+
+name: rook-ceph-cluster
+repo: https://charts.rook.io/release
+version: v1.8.7
+
+releaseName: rook-ceph-cluster
+namespace: rook-ceph
+
+valuesInline:
+  toolbox:
+    enabled: true
+
+  cephClusterSpec:
+    dataDirHostPath: /var/lib/rook
+
+    mon:
+      count: 2
+      allowMultiplePerNode: true  # running single node for now
+
+    storage:
+      useAllNodes: false
+      useAllDevices: false
+      config:
+        encryptedDevice: 'true'
+      devices:
+        - name: /dev/disk/by-id/ata-Patriot_P210_2048GB_P210EBBB2109130548-part1
+        - name: /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184-part1
+
+  configOverride: |
+    [global]
+    mon_allow_pool_delete = true
+    osd_pool_default_size = 2
+    osd_pool_default_min_size = 1
+
+  cephBlockPools:
+    - name: ssd-1-replicas
+      spec:
+        deviceClass: ssd
+        failureDomain: osd
+        replicated:
+          size: 1
+      storageClass:
+        name: ssd-1-replicas
+        enabled: true
+        isDefault: true
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+
+    - name: ssd-2-replicas
+      spec:
+        deviceClass: ssd
+        failureDomain: osd
+        replicated:
+          size: 2
+      storageClass:
+        name: ssd-2-replicas
+        enabled: true
+        isDefault: false
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+
+  cephFileSystems: []
+  cephObjectStores: []

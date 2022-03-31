@@ -1,0 +1,3 @@
+app:
+  name: rook-ceph-cluster
+managed-by: argocd

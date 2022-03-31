@@ -1,0 +1,9 @@
+# see https://prometheus-operator.dev/docs/prologue/quick-start/
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# namespace: monitoring # some resources are in kube-system instead!
+
+resources:
+  - github.com/prometheus-operator/kube-prometheus?ref=v0.10.0
+
