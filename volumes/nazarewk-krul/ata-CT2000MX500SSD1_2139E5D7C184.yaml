@@ -16,8 +16,9 @@ spec:
               values:
                 - nazarewk-krul
   volumeMode: Block
-#  capacity:
-#    storage: 512Gi
+  capacity:
+    # blockdev --getsize64 /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184
+    storage: '2000398934016'
   local:
     path: /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184
   accessModes:
