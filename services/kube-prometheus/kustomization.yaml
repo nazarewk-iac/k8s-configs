@@ -5,9 +5,8 @@ kind: Kustomization
 # namespace: monitoring # some resources are in kube-system instead!
 
 resources:
-  # v0.10.0 has issue with too long annotation
-  - github.com/prometheus-operator/kube-prometheus?ref=eb0fafd789d14d1c60cb95939449ea4cd500f43f
+  - github.com/prometheus-operator/kube-prometheus?ref=v0.10.0
 
-# TODO: apply all except failing resource
-# TODO: apply failing resource separately
-# TODO: add StorageSpec https://prometheus-operator.dev/docs/operator/api/#storagespec
+patchesStrategicMerge:
+  - crd-prometheuses.yaml
+  - prometheus-instance.yaml
