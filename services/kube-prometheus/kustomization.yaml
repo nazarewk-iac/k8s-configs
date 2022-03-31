@@ -7,3 +7,7 @@ kind: Kustomization
 resources:
   # v0.10.0 has issue with too long annotation
   - github.com/prometheus-operator/kube-prometheus?ref=eb0fafd789d14d1c60cb95939449ea4cd500f43f
+
+# TODO: apply all except failing resource
+# TODO: apply failing resource separately
+# TODO: add StorageSpec https://prometheus-operator.dev/docs/operator/api/#storagespec
