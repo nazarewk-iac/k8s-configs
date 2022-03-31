@@ -35,7 +35,7 @@ valuesInline:
       storageClassDeviceSets:
         - name: ssd
           count: 2
-          portable: truedrop rook ceph cluster
+          portable: true
           encrypted: true
           volumeClaimTemplates:
             - metadata:
@@ -56,7 +56,8 @@ valuesInline:
   configOverride: |
     [global]
     mon_allow_pool_delete = true
-    osd_pool_default_size = 2
+    osd_pool_default_size = 2        - name: nazarewk-krul
+
     osd_pool_default_min_size = 1
 
   cephBlockPools:
