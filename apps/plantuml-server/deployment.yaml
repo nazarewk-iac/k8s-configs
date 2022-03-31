@@ -24,7 +24,7 @@ spec:
               name: jetty-tmp
           resources:
             limits:
-              memory: 2G
+              memory: 3G
               cpu: 1000m
       volumes:
         - name: jetty-tmp
