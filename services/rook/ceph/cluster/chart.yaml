@@ -21,11 +21,11 @@ valuesInline:
     mon:
       count: 3
       allowMultiplePerNode: true  # running single node for now
-#      volumeClaimTemplate:
-#        storageClassName: local-storage
-#        resources:
-#          requests:
-#            storage: 512Gi
+    #      volumeClaimTemplate:
+    #        storageClassName: local-storage
+    #        resources:
+    #          requests:
+    #            storage: 512Gi
 
     storage:
       useAllNodes: true
@@ -56,8 +56,7 @@ valuesInline:
   configOverride: |
     [global]
     mon_allow_pool_delete = true
-    osd_pool_default_size = 2        - name: nazarewk-krul
-
+    osd_pool_default_size = 2
     osd_pool_default_min_size = 1
 
   cephBlockPools:
