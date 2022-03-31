@@ -19,13 +19,13 @@ valuesInline:
     dataDirHostPath: /var/lib/rook
 
     mon:
-      count: 2
+      count: 3
       allowMultiplePerNode: true  # running single node for now
-      volumeClaimTemplate:
-        storageClassName: local-storage
-        resources:
-          requests:
-            storage: 512Gi
+#      volumeClaimTemplate:
+#        storageClassName: local-storage
+#        resources:
+#          requests:
+#            storage: 512Gi
 
     storage:
       useAllNodes: false
