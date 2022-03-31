@@ -1,0 +1,3 @@
+app:
+  name: plantuml-server
+managed-by: argocd

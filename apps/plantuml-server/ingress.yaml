@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server
+spec:
+  ingressClassName: istio
+  rules:
+    - host: plantuml.nazarewk.pw
+      http:
+        paths:
+          - backend:
+              service:
+                name: plantuml
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
