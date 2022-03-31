@@ -19,7 +19,7 @@ valuesInline:
     dataDirHostPath: /var/lib/rook
 
     mon:
-      count: 3
+      count: 1
       allowMultiplePerNode: true  # running single node for now
 #      volumeClaimTemplate:
 #        storageClassName: local-storage
