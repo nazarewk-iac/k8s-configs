@@ -49,6 +49,32 @@ valuesInline:
         limits:
           cpu: 4
           memory: 4Gi
+    healthCheck:
+      livenessProbe:
+        mon:
+          disabled: false
+          probe: &livenessProbe
+            timeoutSeconds: &timeout 10
+            periodSeconds: &period 15
+            failureThreshold: &livenessFailure 4
+        mgr:
+          disabled: false
+        osd:
+          disabled: false
+      startupProbe:
+        mon:
+          disabled: false
+          probe: &startupProbe
+            timeoutSeconds: *timeout
+            periodSeconds: *period
+            successThreshold: 4
+            failureThreshold: 240
+        mgr:
+          disabled: false
+          probe: *startupProbe
+        osd:
+          disabled: false
+          probe: *startupProbe
 
   configOverride: |
     [global]
