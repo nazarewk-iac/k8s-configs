@@ -20,13 +20,8 @@ valuesInline:
     dataDirHostPath: /var/lib/rook/rook-ceph-nazarewk-krul
 
     mon:
-      count: 3
+      count: 1
       allowMultiplePerNode: true  # running single node for now
-    #      volumeClaimTemplate:
-    #        storageClassName: local-storage
-    #        resources:
-    #          requests:
-    #            storage: 512Gi
 
     storage:
       useAllNodes: true
@@ -36,6 +31,8 @@ valuesInline:
       devices:
         # NVMe - 1TB - XPG GAMMIX S70 BLADE (2TB total)
         - fullpath: /dev/disk/by-partlabel/nvme-rook-ceph-0
+          config:
+            osdsPerDevice: '2'
         # SSD - 2TB - Patriot P210
         - fullpath: /dev/disk/by-id/ata-Patriot_P210_2048GB_P210EBBB2109130548
         # SSD - 2TB - Crucial MX500
@@ -54,7 +51,7 @@ valuesInline:
         mon:
           disabled: false
           probe: &livenessProbe
-            timeoutSeconds: &timeout 10
+            timeoutSeconds: &timeout 30
             periodSeconds: &period 15
             failureThreshold: &livenessFailure 4
         mgr:
@@ -67,7 +64,7 @@ valuesInline:
           probe: &startupProbe
             periodSeconds: *period
             timeoutSeconds: 5
-            initialDelaySeconds: 60
+            initialDelaySeconds: 10
             failureThreshold: 240
         mgr:
           disabled: false
