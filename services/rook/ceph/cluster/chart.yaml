@@ -65,9 +65,9 @@ valuesInline:
         mon:
           disabled: false
           probe: &startupProbe
-            timeoutSeconds: *timeout
             periodSeconds: *period
-            successThreshold: 4
+            timeoutSeconds: 5
+            initialDelaySeconds: 60
             failureThreshold: 240
         mgr:
           disabled: false

@@ -7,7 +7,7 @@ cd "${BASH_SOURCE[0]%/*}"
 q(){
   yq "$@" chart.yaml
 }
-kustomize build --enable-helm . | kubectl delete -f -
+kustomize build --enable-helm . | kubectl delete --force -f -
 kubectl patch -n rook-ceph cephblockpools.ceph.rook.io --patch='{"metadata":{"finalizers":[]}}'
 if test "$(hostname)" = "nazarewk-krul"; then
   rm -rf /var/lib/rook
