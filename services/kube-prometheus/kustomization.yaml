@@ -9,4 +9,4 @@ resources:
 
 patchesStrategicMerge:
   - crd-prometheuses.yaml
-  - prometheus-instance.yaml
+  #- prometheus-pvc.yaml
