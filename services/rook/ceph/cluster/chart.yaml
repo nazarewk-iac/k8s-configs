@@ -15,8 +15,9 @@ valuesInline:
   toolbox:
     enabled: true
 
+  clusterName: rook-ceph-nazarewk-krul
   cephClusterSpec:
-    dataDirHostPath: /var/lib/rook
+    dataDirHostPath: /var/lib/rook/rook-ceph-nazarewk-krul
 
     mon:
       count: 3
@@ -32,28 +33,21 @@ valuesInline:
       useAllDevices: false
       config:
         encryptedDevice: 'true'
-      storageClassDeviceSets:
-        - name: ssd
-          count: 2
-          portable: true
-          encrypted: true
-          volumeClaimTemplates:
-            - metadata:
-                labels:
-                  storage.nazarewk.pw/type: ssd
-              spec:
-                storageClassName: local-storage
-                resources:
-                  requests:
-                    storage: 10Gi
-                volumeMode: Block
-                accessModes:
-                  - ReadWriteOnce
+      devices:
+        # NVMe - 1TB - XPG GAMMIX S70 BLADE (2TB total)
+        - fullpath: /dev/disk/by-partlabel/nvme-rook-ceph-0
+        # SSD - 2TB - Patriot P210
+        - fullpath: /dev/disk/by-id/ata-Patriot_P210_2048GB_P210EBBB2109130548
+        # SSD - 2TB - Crucial MX500
+        - fullpath: /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184
+        # 2x HDD - 4 TB - Seagate Ironwolf Pro
+        - fullpath: /dev/disk/by-id/ata-ST4000NE001-2MA101_WS238BWF
+        - fullpath: /dev/disk/by-id/ata-ST4000NE001-2MA101_WS23D2Z1
 
     resources:
       mon:
         limits:
-          cpu: 2
+          cpu: 4
           memory: 4Gi
 
   configOverride: |
@@ -63,16 +57,31 @@ valuesInline:
     osd_pool_default_min_size = 1
 
   cephBlockPools:
+    - name: nvme-1-replicas
+      spec:
+        deviceClass: nvme
+        failureDomain: osd
+        replicated:
+          size: 1
+          requireSafeReplicaSize: false
+      storageClass:
+        name: nvme-1-replicas
+        enabled: true
+        isDefault: false
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+        
     - name: ssd-1-replicas
       spec:
         deviceClass: ssd
         failureDomain: osd
         replicated:
           size: 1
+          requireSafeReplicaSize: false
       storageClass:
         name: ssd-1-replicas
         enabled: true
-        isDefault: true
+        isDefault: false
         allowVolumeExpansion: true
         reclaimPolicy: Delete
 
@@ -84,6 +93,108 @@ valuesInline:
           size: 2
       storageClass:
         name: ssd-2-replicas
+        enabled: true
+        isDefault: false
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+
+    - name: hdd-1-replicas
+      spec:
+        deviceClass: hdd
+        failureDomain: osd
+        replicated:
+          size: 1
+          requireSafeReplicaSize: false
+      storageClass:
+        name: hdd-1-replicas
+        enabled: true
+        isDefault: false
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+
+    - name: hdd-2-replicas
+      spec:
+        deviceClass: hdd
+        failureDomain: osd
+        replicated:
+          size: 2
+      storageClass:
+        name: hdd-2-replicas
+        enabled: true
+        isDefault: false
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+
+    - name: fast-2-replicas
+      spec:
+        failureDomain: osd
+        replicated:
+          size: 2
+          hybridStorage:
+            primaryDeviceClass: nvme
+            secondaryDeviceClass: ssd
+      storageClass:
+        name: fast-2-replicas
+        enabled: true
+        isDefault: false
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+
+    - name: fast-3-replicas
+      spec:
+        failureDomain: osd
+        replicated:
+          size: 3
+          hybridStorage:
+            primaryDeviceClass: nvme
+            secondaryDeviceClass: ssd
+      storageClass:
+        name: fast-3-replicas
+        enabled: true
+        isDefault: false
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+
+    - name: medium-2-replicas
+      spec:
+        failureDomain: osd
+        replicated:
+          size: 2
+          hybridStorage:
+            primaryDeviceClass: ssd
+            secondaryDeviceClass: hdd
+      storageClass:
+        name: medium-2-replicas
+        enabled: true
+        isDefault: false
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+
+    - name: medium-3-replicas
+      spec:
+        failureDomain: osd
+        replicated:
+          size: 3
+          hybridStorage:
+            primaryDeviceClass: ssd
+            secondaryDeviceClass: hdd
+      storageClass:
+        name: medium-3-replicas
+        enabled: true
+        isDefault: false
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+
+    - name: medium-4-replicas
+      spec:
+        failureDomain: osd
+        replicated:
+          size: 4
+          hybridStorage:
+            primaryDeviceClass: ssd
+            secondaryDeviceClass: hdd
+      storageClass:
+        name: medium-4-replicas
         enabled: true
         isDefault: false
         allowVolumeExpansion: true
