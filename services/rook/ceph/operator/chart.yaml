@@ -6,7 +6,7 @@ metadata:
 
 name: rook-ceph
 repo: https://charts.rook.io/release
-version: v1.8.7
+version: v1.8.8
 
 releaseName: rook-ceph
 namespace: rook-ceph

@@ -6,7 +6,7 @@ metadata:
 
 name: rook-ceph-cluster
 repo: https://charts.rook.io/release
-version: v1.8.7
+version: v1.8.8
 
 releaseName: rook-ceph-cluster
 namespace: rook-ceph
@@ -20,7 +20,7 @@ valuesInline:
     dataDirHostPath: /var/lib/rook/rook-ceph-nazarewk-krul
 
     mon:
-      count: 1
+      count: 3
       allowMultiplePerNode: true  # running single node for now
 
     storage:
@@ -29,10 +29,6 @@ valuesInline:
       config:
         encryptedDevice: 'true'
       devices:
-        # NVMe - 1TB - XPG GAMMIX S70 BLADE (2TB total)
-        - fullpath: /dev/disk/by-partlabel/nvme-rook-ceph-0
-          config:
-            osdsPerDevice: '2'
         # SSD - 2TB - Patriot P210
         - fullpath: /dev/disk/by-id/ata-Patriot_P210_2048GB_P210EBBB2109130548
         # SSD - 2TB - Crucial MX500
@@ -40,6 +36,28 @@ valuesInline:
         # 2x HDD - 4 TB - Seagate Ironwolf Pro
         - fullpath: /dev/disk/by-id/ata-ST4000NE001-2MA101_WS238BWF
         - fullpath: /dev/disk/by-id/ata-ST4000NE001-2MA101_WS23D2Z1
+      storageClassDeviceSets:
+        # NVMe - 1TB - XPG GAMMIX S70 BLADE (2TB total)
+        # see https://github.com/rook/rook/issues/9923 to read on "Used by ceph-disk" discovery error
+        # note: do not run multiple OSDs on NVMe, because I want to run an OSD-based failure domain
+        # note: partition cannot be used with encrypted drive? https://github.com/rook/rook/pull/4879
+        # runs on: LVM on LUKS on partition
+        # note: LVs cannot be mounted without a PVC in Rook https://github.com/rook/rook/issues/5751
+        - name: rook-ceph-nvme-0
+          count: 1
+          portable: false
+          tuneDeviceClass: true
+          volumeClaimTemplates:
+            - metadata:
+                name: rook-ceph-nvme-0
+              spec:
+                storageClassName: manual-rook-ceph-cluster
+                resources:
+                  requests:
+                    storage: 1023G
+                volumeMode: Block
+                accessModes:
+                  - ReadWriteOnce
 
     resources:
       mon:
@@ -51,7 +69,7 @@ valuesInline:
         mon:
           disabled: false
           probe: &livenessProbe
-            timeoutSeconds: &timeout 30
+            timeoutSeconds: &timeout 60
             periodSeconds: &period 15
             failureThreshold: &livenessFailure 4
         mgr:

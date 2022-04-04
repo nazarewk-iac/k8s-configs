@@ -3,7 +3,7 @@ set -xeEuo pipefail
 
 render() {
   # You can use this directly
-  kustomize build .
+  kustomize build --enable-helm .
 }
 
 is-apply() {
@@ -21,6 +21,6 @@ conditional-apply() {
     kubectl apply -f - "$@"
   else
     cat
-    echo "\$APPLY is not set to 1, skipping kubectl apply"
+    echo "\$APPLY is not set to 1, skipping kubectl apply" >&2
   fi
 }

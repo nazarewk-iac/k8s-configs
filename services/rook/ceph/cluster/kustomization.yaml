@@ -6,6 +6,7 @@ namespace: rook-ceph
 commonLabels:
   app.kubernetes.io/name: rook
   app.kubernetes.io/component: ceph-cluster
-
+resources:
+  - ./nvme-pv.yaml
 generators:
   - chart.yaml
