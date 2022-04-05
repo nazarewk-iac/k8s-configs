@@ -1,0 +1,160 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: manual-rook-ceph-cluster
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rook-ceph-nvme-0
+  labels:
+    storage.nazarewk.pw/device-class: nvme
+  annotations:
+    storage.nazarewk.pw/descrition: "NVMe - 1TB partition - XPG GAMMIX S70 BLADE (2TB total)"
+    storage.nazarewk.pw/notes: |
+      - see https://github.com/rook/rook/issues/9923 to read on "Used by ceph-disk" discovery error
+      - do not run multiple OSDs on NVMe, because I want to run an OSD-based failure domain
+      - raw partition cannot be used with encrypted drive? https://github.com/rook/rook/pull/4879
+      - LVs cannot be mounted without a PVC in Rook https://github.com/rook/rook/issues/5751
+spec:
+  storageClassName: manual-rook-ceph-cluster
+  capacity:
+    storage: 1020G
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Block
+  local:
+    path: /dev/disk/by-id/nvme-XPG_GAMMIX_S70_BLADE_2L482L2B1Q1J-part3
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - nazarewk-krul
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rook-ceph-ssd-0
+  labels:
+    storage.nazarewk.pw/device-class: ssd
+  annotations:
+    storage.nazarewk.pw/descrition: "SSD - 2TB - Patriot P210"
+    storage.nazarewk.pw/notes: ""
+spec:
+  storageClassName: manual-rook-ceph-cluster
+  capacity:
+    storage: 2040G
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Block
+  local:
+    path: /dev/disk/by-id/ata-Patriot_P210_2048GB_P210EBBB2109130548
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - nazarewk-krul
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rook-ceph-ssd-1
+  labels:
+    storage.nazarewk.pw/device-class: ssd
+  annotations:
+    storage.nazarewk.pw/descrition: "SSD - 2TB - Crucial MX500"
+    storage.nazarewk.pw/notes: ""
+spec:
+  storageClassName: manual-rook-ceph-cluster
+  capacity:
+    storage: 2040G
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Block
+  local:
+    path: /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - nazarewk-krul
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rook-ceph-hdd-0
+  labels:
+    storage.nazarewk.pw/device-class: hdd
+  annotations:
+    storage.nazarewk.pw/descrition: "HDD - 4 TB - Seagate Ironwolf Pro"
+    storage.nazarewk.pw/notes: ""
+spec:
+  storageClassName: manual-rook-ceph-cluster
+  capacity:
+    storage: 4090G
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Block
+  local:
+    path: /dev/disk/by-id/ata-ST4000NE001-2MA101_WS238BWF
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - nazarewk-krul
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rook-ceph-hdd-1
+  labels:
+    storage.nazarewk.pw/device-class: hdd
+  annotations:
+    storage.nazarewk.pw/descrition: "HDD - 4 TB - Seagate Ironwolf Pro"
+    storage.nazarewk.pw/notes: ""
+spec:
+  storageClassName: manual-rook-ceph-cluster
+  capacity:
+    storage: 4090G
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Block
+  local:
+    path: /dev/disk/by-id/ata-ST4000NE001-2MA101_WS23D2Z1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - nazarewk-krul

@@ -1,4 +1,4 @@
-# docs are wrong, see https://github.com/kubernetes-sigs/kustomize/blob/b0d7721049d557063e324c7c2c1ef45bb73e4bdc/api/types/helmchartargs.go#L33-L75
+# HelmChartInflationGenerator docs are wrong, see https://github.com/kubernetes-sigs/kustomize/blob/b0d7721049d557063e324c7c2c1ef45bb73e4bdc/api/types/helmchartargs.go#L33-L75
 apiVersion: builtin
 kind: HelmChartInflationGenerator
 metadata:
@@ -20,7 +20,7 @@ valuesInline:
     dataDirHostPath: /var/lib/rook/rook-ceph-nazarewk-krul
 
     mon:
-      count: 3
+      count: 1
       allowMultiplePerNode: true  # running single node for now
 
     storage:
@@ -28,33 +28,54 @@ valuesInline:
       useAllDevices: false
       config:
         encryptedDevice: 'true'
-      devices:
-        # SSD - 2TB - Patriot P210
-        - fullpath: /dev/disk/by-id/ata-Patriot_P210_2048GB_P210EBBB2109130548
-        # SSD - 2TB - Crucial MX500
-        - fullpath: /dev/disk/by-id/ata-CT2000MX500SSD1_2139E5D7C184
-        # 2x HDD - 4 TB - Seagate Ironwolf Pro
-        - fullpath: /dev/disk/by-id/ata-ST4000NE001-2MA101_WS238BWF
-        - fullpath: /dev/disk/by-id/ata-ST4000NE001-2MA101_WS23D2Z1
       storageClassDeviceSets:
-        # NVMe - 1TB - XPG GAMMIX S70 BLADE (2TB total)
-        # see https://github.com/rook/rook/issues/9923 to read on "Used by ceph-disk" discovery error
-        # note: do not run multiple OSDs on NVMe, because I want to run an OSD-based failure domain
-        # note: partition cannot be used with encrypted drive? https://github.com/rook/rook/pull/4879
-        # runs on: LVM on LUKS on partition
-        # note: LVs cannot be mounted without a PVC in Rook https://github.com/rook/rook/issues/5751
-        - name: rook-ceph-nvme-0
+        - name: rook-ceph-nvme
           count: 1
           portable: false
-          tuneDeviceClass: true
+          encrypted: true
           volumeClaimTemplates:
             - metadata:
-                name: rook-ceph-nvme-0
+                labels:
+                  storage.nazarewk.pw/device-class: nvme
+
               spec:
                 storageClassName: manual-rook-ceph-cluster
                 resources:
                   requests:
-                    storage: 1023G
+                    storage: 1020G
+                volumeMode: Block
+                accessModes:
+                  - ReadWriteOnce
+        - name: rook-ceph-ssd
+          count: 2
+          portable: false
+          encrypted: true
+          volumeClaimTemplates:
+            - metadata:
+                labels:
+                  storage.nazarewk.pw/device-class: ssd
+              spec:
+                storageClassName: manual-rook-ceph-cluster
+                resources:
+                  requests:
+                    storage: 2040G
+                volumeMode: Block
+                accessModes:
+                  - ReadWriteOnce
+        - name: rook-ceph-hdd
+          count: 2
+          portable: false
+          encrypted: true
+          volumeClaimTemplates:
+            - metadata:
+                labels:
+                  storage.nazarewk.pw/device-class: hdd
+
+              spec:
+                storageClassName: manual-rook-ceph-cluster
+                resources:
+                  requests:
+                    storage: 4040G
                 volumeMode: Block
                 accessModes:
                   - ReadWriteOnce
@@ -65,6 +86,11 @@ valuesInline:
           cpu: 4
           memory: 4Gi
     healthCheck:
+      daemonHealth:
+        mon:
+          disabled: false
+          interval: 2m50s
+          timeout: 30m
       livenessProbe:
         mon:
           disabled: false
@@ -94,37 +120,24 @@ valuesInline:
   configOverride: |
     [global]
     mon_allow_pool_delete = true
-    osd_pool_default_size = 2
+    osd_pool_default_size = 1
     osd_pool_default_min_size = 1
 
   cephBlockPools:
-    - name: nvme-1-replicas
-      spec:
-        deviceClass: nvme
-        failureDomain: osd
-        replicated:
-          size: 1
-          requireSafeReplicaSize: false
-      storageClass:
-        name: nvme-1-replicas
-        enabled: true
-        isDefault: false
-        allowVolumeExpansion: true
-        reclaimPolicy: Delete
-        
-    - name: ssd-1-replicas
-      spec:
-        deviceClass: ssd
-        failureDomain: osd
-        replicated:
-          size: 1
-          requireSafeReplicaSize: false
-      storageClass:
-        name: ssd-1-replicas
-        enabled: true
-        isDefault: false
-        allowVolumeExpansion: true
-        reclaimPolicy: Delete
+    ## single replica NVMe pool doesn't work at all
+    #- name: nvme-1-replicas
+    #  spec:
+    #    deviceClass: nvme
+    #    failureDomain: osd
+    #    replicated:
+    #      size: 1
+    #      requireSafeReplicaSize: false
+    #  storageClass:
+    #    name: nvme-1-replicas
+    #    enabled: true
+    #    isDefault: false
+    #    allowVolumeExpansion: true
+    #    reclaimPolicy: Delete
 
     - name: ssd-2-replicas
       spec:
@@ -134,20 +147,6 @@ valuesInline:
           size: 2
       storageClass:
         name: ssd-2-replicas
-        enabled: true
-        isDefault: false
-        allowVolumeExpansion: true
-        reclaimPolicy: Delete
-
-    - name: hdd-1-replicas
-      spec:
-        deviceClass: hdd
-        failureDomain: osd
-        replicated:
-          size: 1
-          requireSafeReplicaSize: false
-      storageClass:
-        name: hdd-1-replicas
         enabled: true
         isDefault: false
         allowVolumeExpansion: true
