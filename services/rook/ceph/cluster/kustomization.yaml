@@ -12,9 +12,12 @@ generators:
   - chart.yaml
 
 patches:
-  - path: patch-storageclass-replace.yaml
-    target:
+  - target:
       group: storage.k8s.io
       version: v1
       kind: StorageClass
       labelSelector: app.kubernetes.io/component=ceph-cluster
+    patch: |
+      - op: add
+        path: "/metadata/annotations/argocd.argoproj.io~1sync-options"
+        value: Replace=true
