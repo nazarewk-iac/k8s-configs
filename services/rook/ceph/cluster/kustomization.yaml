@@ -10,3 +10,11 @@ resources:
   - pvs.yaml
 generators:
   - chart.yaml
+
+patches:
+  - path: patch-storageclass-replace.yaml
+    target:
+      group: storage.k8s.io
+      version: v1
+      kind: StorageClass
+      labelSelector: app.kubernetes.io/component=ceph-cluster
