@@ -1,0 +1,3 @@
+app:
+  name: operator-lifecycle-manager
+managed-by: argocd
