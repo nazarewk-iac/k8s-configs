@@ -26,14 +26,17 @@ valuesInline:
     storage:
       useAllNodes: true
       useAllDevices: false
-      config:
-        encryptedDevice: 'true'
       storageClassDeviceSets:
         - name: rook-ceph-nvme
           count: 1
           portable: false
           encrypted: true
+          config:
+            deviceClass: nvme
           volumeClaimTemplates:
+            # for whatever reason I need to manually change class from ssd to nvme using:
+            # 1. `ceph osd crush rm-device-class OSD_NO`
+            # 2. `ceph osd crush set-device-class nvme OSD_NO`
             - metadata:
                 labels:
                   storage.nazarewk.pw/device-class: nvme
@@ -50,6 +53,8 @@ valuesInline:
           count: 2
           portable: false
           encrypted: true
+          config:
+            deviceClass: ssd
           volumeClaimTemplates:
             - metadata:
                 labels:
@@ -66,6 +71,8 @@ valuesInline:
           count: 2
           portable: false
           encrypted: true
+          config:
+            deviceClass: hdd
           volumeClaimTemplates:
             - metadata:
                 labels:
@@ -83,20 +90,21 @@ valuesInline:
     resources:
       mon:
         limits:
-          cpu: 4
+          # mon seems to be single-threaded
+          cpu: 1
           memory: 4Gi
     healthCheck:
       daemonHealth:
         mon:
           disabled: false
-          interval: 2m50s
-          timeout: 30m
+          interval: 1m
+          timeout: 15m
       livenessProbe:
         mon:
           disabled: false
           probe: &livenessProbe
-            timeoutSeconds: &timeout 60
-            periodSeconds: &period 15
+            timeoutSeconds: &timeout 120
+            periodSeconds: &period 29
             failureThreshold: &livenessFailure 4
         mgr:
           disabled: false
@@ -117,28 +125,7 @@ valuesInline:
           disabled: false
           probe: *startupProbe
 
-  configOverride: |
-    [global]
-    mon_allow_pool_delete = true
-    osd_pool_default_size = 1
-    osd_pool_default_min_size = 1
-
   cephBlockPools:
-    ## single replica NVMe pool doesn't work at all
-    #- name: nvme-1-replicas
-    #  spec:
-    #    deviceClass: nvme
-    #    failureDomain: osd
-    #    replicated:
-    #      size: 1
-    #      requireSafeReplicaSize: false
-    #  storageClass:
-    #    name: nvme-1-replicas
-    #    enabled: true
-    #    isDefault: false
-    #    allowVolumeExpansion: true
-    #    reclaimPolicy: Delete
-
     - name: ssd-2-replicas
       spec:
         deviceClass: ssd
