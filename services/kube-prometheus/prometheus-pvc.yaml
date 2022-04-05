@@ -11,7 +11,7 @@ spec:
       spec:
         accessModes:
         - "ReadWriteOnce"
-        storageClassName: 'ssd-2-replicas'
+        storageClassName: 'block-ssd-2-replicas'
         resources:
           requests:
             storage: 50Gi

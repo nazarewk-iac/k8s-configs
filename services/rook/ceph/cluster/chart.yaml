@@ -133,7 +133,7 @@ valuesInline:
         replicated:
           size: 2
       storageClass:
-        name: ssd-2-replicas
+        name: block-ssd-2-replicas
         enabled: true
         isDefault: false
         allowVolumeExpansion: true
@@ -146,7 +146,7 @@ valuesInline:
         replicated:
           size: 2
       storageClass:
-        name: hdd-2-replicas
+        name: block-hdd-2-replicas
         enabled: true
         isDefault: false
         allowVolumeExpansion: true
@@ -161,7 +161,7 @@ valuesInline:
             primaryDeviceClass: nvme
             secondaryDeviceClass: ssd
       storageClass:
-        name: fast-2-replicas
+        name: block-fast-2-replicas
         enabled: true
         isDefault: false
         allowVolumeExpansion: true
@@ -176,7 +176,7 @@ valuesInline:
             primaryDeviceClass: nvme
             secondaryDeviceClass: ssd
       storageClass:
-        name: fast-3-replicas
+        name: block-fast-3-replicas
         enabled: true
         isDefault: false
         allowVolumeExpansion: true
@@ -191,7 +191,7 @@ valuesInline:
             primaryDeviceClass: ssd
             secondaryDeviceClass: hdd
       storageClass:
-        name: medium-2-replicas
+        name: block-medium-2-replicas
         enabled: true
         isDefault: false
         allowVolumeExpansion: true
@@ -206,7 +206,7 @@ valuesInline:
             primaryDeviceClass: ssd
             secondaryDeviceClass: hdd
       storageClass:
-        name: medium-3-replicas
+        name: block-medium-3-replicas
         enabled: true
         isDefault: false
         allowVolumeExpansion: true
