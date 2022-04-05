@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: main
+  namespace: monitoring
+spec:
+  storage:
+    volumeClaimTemplate:
+      metadata:
+        name: alertmanager-main
+      spec:
+        accessModes:
+        - "ReadWriteOnce"
+        storageClassName: 'block-ssd-2-replicas'
+        resources:
+          requests:
+            storage: 5Gi

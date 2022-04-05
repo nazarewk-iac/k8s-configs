@@ -10,3 +10,4 @@ resources:
 patchesStrategicMerge:
   - crd-prometheuses.yaml
   - prometheus-pvc.yaml
+  - alertmanager-pvc.yaml
