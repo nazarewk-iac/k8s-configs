@@ -212,20 +212,20 @@ valuesInline:
         allowVolumeExpansion: true
         reclaimPolicy: Delete
 
-    - name: medium-4-replicas
-      spec:
-        failureDomain: osd
-        replicated:
-          size: 4
-          hybridStorage:
-            primaryDeviceClass: ssd
-            secondaryDeviceClass: hdd
-      storageClass:
-        name: medium-4-replicas
-        enabled: true
-        isDefault: false
-        allowVolumeExpansion: true
-        reclaimPolicy: Delete
+#    - name: medium-4-replicas
+#      spec:
+#        failureDomain: osd
+#        replicated:
+#          size: 4
+#          hybridStorage:
+#            primaryDeviceClass: ssd
+#            secondaryDeviceClass: hdd
+#      storageClass:
+#        name: medium-4-replicas
+#        enabled: true
+#        isDefault: false
+#        allowVolumeExpansion: true
+#        reclaimPolicy: Delete
 
   cephFileSystems: []
   cephObjectStores: []
