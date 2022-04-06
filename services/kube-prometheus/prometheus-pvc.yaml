@@ -4,6 +4,8 @@ metadata:
   name: k8s
   namespace: monitoring
 spec:
+  priorityClassName: system-cluster-critical
+
   storage:
     volumeClaimTemplate:
       metadata:

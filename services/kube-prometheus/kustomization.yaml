@@ -6,6 +6,8 @@ kind: Kustomization
 
 resources:
   - github.com/prometheus-operator/kube-prometheus?ref=v0.10.0
+components:
+  - components/priorities
 
 patchesStrategicMerge:
   - crd-prometheuses.yaml
