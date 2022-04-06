@@ -13,3 +13,6 @@ namespace: rook-ceph
 
 valuesInline:
   rbacEnable: true
+  # see https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#marking-pod-as-critical
+  priorityClassNames:
+    all: system-node-critical

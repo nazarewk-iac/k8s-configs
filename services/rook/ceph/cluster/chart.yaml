@@ -19,6 +19,10 @@ valuesInline:
   cephClusterSpec:
     dataDirHostPath: /var/lib/rook/rook-ceph-nazarewk-krul
 
+    # see https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#marking-pod-as-critical
+    priorityClassNames:
+      all: system-node-critical
+
     mon:
       count: 1
       allowMultiplePerNode: true  # running single node for now
