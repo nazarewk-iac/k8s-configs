@@ -1,0 +1,114 @@
+# docs are wrong, see https://github.com/kubernetes-sigs/kustomize/blob/b0d7721049d557063e324c7c2c1ef45bb73e4bdc/api/types/helmchartargs.go#L33-L75
+apiVersion: builtin
+kind: HelmChartInflationGenerator
+metadata:
+  name: vault
+
+name: vault
+repo: https://helm.releases.hashicorp.com
+version: 0.19.0
+
+releaseName: vault
+namespace: vault
+
+valuesInline:
+  injector:
+    replicas: 3
+    metrics:
+      enabled: true
+
+    logLevel: info
+    logFormat: json
+
+    affinity: ''  # running single-node cluster
+  server:
+    enabled: true
+
+    logLevel: info
+    logFormat: json
+
+    affinity: ''  # running single-node cluster
+
+    dataStorage:
+      enabled: true
+      size: 10Gi
+      storageClass: block-fast-3-replicas
+    auditStorage:
+      enabled: true
+      size: 5Gi
+      storageClass: block-fast-3-replicas
+
+    ingress:
+      enabled: true
+      activeService: false
+      ingressClassName: istio
+      hosts:
+        - host: vault.nazarewk.pw
+          paths: []
+
+    standalone:
+      enabled: false
+    annotations:
+      # see https://github.com/hashicorp/go-discover/blob/8b3ddf4/provider/k8s/k8s_discover.go#L27-L59
+      # consul.hashicorp.com/auto-join-port: 'https-internal'
+    ha:
+      enabled: true
+      replicas: 5
+      raft:
+        enabled: true
+        config: |
+          ui = true
+          
+          listener "tcp" {
+            # remember to change auto_join_scheme
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+          }
+          
+          storage "raft" {
+            path = "/vault/data"
+            
+            /*
+            retry_join {
+              auto_join_scheme = "http"
+              auto_join = "provider=k8s namespace=vault host_network=false label_selector=\"app.kubernetes.io/name=vault\""
+            }
+            */
+            retry_join {
+              leader_api_addr = "http://vault-0.vault-internal:8200"
+            }
+            retry_join {
+              leader_api_addr = "http://vault-1.vault-internal:8200"
+            }
+            retry_join {
+              leader_api_addr = "http://vault-2.vault-internal:8200"
+            }
+            retry_join {
+              leader_api_addr = "http://vault-3.vault-internal:8200"
+            }
+            retry_join {
+              leader_api_addr = "http://vault-4.vault-internal:8200"
+            }
+            autopilot {
+              cleanup_dead_servers = "true"
+              last_contact_threshold = "200ms"
+              last_contact_failure_threshold = "10m"
+              max_trailing_logs = 250000
+              min_quorum = 3
+              server_stabilization_time = "10s"
+            }
+          }
+          
+          service_registration "kubernetes" {}
+    readinessProbe:
+      enabled: true
+      path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
+    livenessProbe:
+      enabled: true
+      path: "/v1/sys/health?standbyok=true"
+      initialDelaySeconds: 60
+  ui:
+    enabled: true
+  csi:
+    enabled: true
