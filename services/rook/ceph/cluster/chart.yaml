@@ -24,7 +24,7 @@ valuesInline:
       all: system-node-critical
 
     mon:
-      count: 1
+      count: 3
       allowMultiplePerNode: true  # running single node for now
 
     storage:
