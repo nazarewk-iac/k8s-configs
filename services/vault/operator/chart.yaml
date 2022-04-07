@@ -1,0 +1,16 @@
+# docs are wrong, see https://github.com/kubernetes-sigs/kustomize/blob/b0d7721049d557063e324c7c2c1ef45bb73e4bdc/api/types/helmchartargs.go#L33-L75
+apiVersion: builtin
+kind: HelmChartInflationGenerator
+metadata:
+  name: vault-operator
+
+name: vault-operator
+repo: https://kubernetes-charts.banzaicloud.com
+version: 1.15.5
+
+releaseName: vault-operator
+namespace: vault-operator
+
+includeCrds: true
+
+valuesInline: {}
