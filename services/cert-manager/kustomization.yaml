@@ -6,5 +6,4 @@ kind: Kustomization
 resources:
   - https://github.com/cert-manager/cert-manager/releases/download/v1.8.0/cert-manager.yaml
   - vault-issuer.yaml
-  - cert-manager-test.yaml
   - letsencrypt-prod.yaml
