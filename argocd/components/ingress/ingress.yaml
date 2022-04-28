@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: argocd-server
   namespace: argocd
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
   labels:
     app.kubernetes.io/component: server
     app.kubernetes.io/instance: argocd
