@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: plantuml-server
+  namespace: plantuml-server
   labels: {} # taken care of by kustomize
 spec:
   replicas: 1

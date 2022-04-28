@@ -2,8 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: plantuml-server
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+  namespace: plantuml-server
 spec:
   ingressClassName: istio
   rules:
