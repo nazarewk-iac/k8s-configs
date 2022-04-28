@@ -13,6 +13,9 @@ spec:
     - name: in-cluster
       namespace: argocd
       server: '*'
+    - name: in-cluster
+      namespace: istio-system
+      server: '*'
   namespaceResourceWhitelist:
     - group: '*'
       kind: '*'
