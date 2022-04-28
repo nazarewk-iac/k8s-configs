@@ -1,0 +1,3 @@
+app:
+  name: cert-manager
+managed-by: argocd

@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-manager-test
+  namespace: cert-manager
+spec:
+  secretName: cert-manager-test
+  commonName: cert-manager-test.cluster.local
+  duration: 72h
+  dnsNames:
+    - cert-manager-test.cluster.local
+    - another.cert-manager-test.cluster.local
+  issuerRef:
+    name: vault-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

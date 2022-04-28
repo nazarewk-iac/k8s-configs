@@ -2,7 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-server
-  annotations: {}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   labels:
     app.kubernetes.io/component: server
     app.kubernetes.io/instance: argocd
@@ -21,3 +22,7 @@ spec:
                   name: http
             path: /
             pathType: Prefix
+  tls:
+    - secretName: argocd-tls
+      hosts:
+        - argo-cd.nazarewk.pw
