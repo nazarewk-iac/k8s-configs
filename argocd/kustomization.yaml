@@ -9,7 +9,7 @@ components:
   - components/ingress
 
 resources:
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.3.2/manifests/ha/install.yaml
+  - bases/upstream
   - bases/manage-self
   - bases/manage-repo
   - namespace.yaml
