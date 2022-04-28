@@ -21,3 +21,25 @@ spec:
                   name: webhook
             path: /
             pathType: Prefix
+
+  tls:
+    - secretName: argocd-applicationset-controller-tls
+      hosts:
+        - argo-cd-application-set.nazarewk.pw
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-applicationset-controller
+  namespace: istio-system
+spec:
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+
+  secretName: argocd-applicationset-controller-tls
+  commonName: argo-cd-application-set.nazarewk.pw
+  dnsNames:
+    - argo-cd-application-set.nazarewk.pw

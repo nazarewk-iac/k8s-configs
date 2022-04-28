@@ -23,6 +23,23 @@ spec:
             path: /
             pathType: Prefix
   tls:
-    - secretName: argocd-tls
+    - secretName: argocd-server-tls
       hosts:
         - argo-cd.nazarewk.pw
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-server
+  namespace: istio-system
+spec:
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+
+  secretName: argocd-server-tls
+  commonName: argo-cd.nazarewk.pw
+  dnsNames:
+    - argo-cd.nazarewk.pw

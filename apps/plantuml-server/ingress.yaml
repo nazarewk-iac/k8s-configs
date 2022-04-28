@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: plantuml-server
   namespace: plantuml-server
+  annotations: {}
 spec:
   ingressClassName: istio
   rules:
@@ -20,3 +21,20 @@ spec:
     - secretName: plantuml-server-tls
       hosts:
         - plantuml.nazarewk.pw
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ingress-cert
+  namespace: istio-system
+spec:
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+
+  secretName: plantuml-server-tls
+  commonName: plantuml.nazarewk.pw
+  dnsNames:
+    - plantuml.nazarewk.pw
